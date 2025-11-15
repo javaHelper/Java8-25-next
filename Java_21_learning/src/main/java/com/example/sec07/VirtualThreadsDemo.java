@@ -1,0 +1,26 @@
+package com.example.sec07;
+
+import java.time.Duration;
+import java.util.concurrent.Executors;
+
+public class VirtualThreadsDemo {
+    public static void main(String[] args) {
+
+        try (var executor = Executors.newVirtualThreadPerTaskExecutor()) {
+            int i = 0;
+            while (i < 10_000) {
+                executor.execute(() -> {
+                    try {
+                        System.out.println("Starting to execute task");
+                        Thread.sleep(Duration.ofSeconds(1));
+                        System.out.println("Task executed");
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+
+                });
+                i++;
+            }
+        }
+    }
+}
